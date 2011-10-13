@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Darwin CMS" default="main" basedir=".">
+
+  <property file="./build.properties" />
+  <property name="tmpdir" value="${project.basedir}/tmp" override="true" />
+  <property name="testsdir" value="${project.basedir}/tests" override="true" />
+  <property name="testreportdir" value="${tmpdir}/reports" override="true" />
+
+  <target name="main" depends="sniff,tests">
+  </target>
+
+  <target name="tests">
+    <exec command="phpunit --configuration ${testsdir}/phpunit.xml --colors" passthru="true"/>
+  </target>
+
+  <target name="tests-report">
+    <exec command="phpunit --coverage-html ${testreportdir}/html --configuration ${testsdir}/phpunit.xml" passthru="true"/>
+  </target>
+
+  <target name="sniff">
+    <phpcodesniffer
+      standard="Zend"
+      showWarnings="true"
+      tabWidth="4">
+      <fileset dir="${project.basedir}">
+        <include name="**/*.php"/>
+        <exclude name="docs/*"/>
+      </fileset>
+      <formatter type="default" usefile="false"/>
+    </phpcodesniffer>
+  </target>
+
+  <target name="documentation">
+    <exec command="docblox run" />
+  </target>
+
+</project>
