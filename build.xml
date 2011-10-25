@@ -4,18 +4,19 @@
 
   <property file="./build.properties" />
   <property name="tmpdir" value="${project.basedir}/tmp" override="true" />
-  <property name="testsdir" value="${project.basedir}/tests" override="true" />
+  <property name="appdir" value="${project.basedir}/app" override="true" />
+  <property name="testconfig" value="${appdir}/phpunit.xml.dist" override="true" />
   <property name="testreportdir" value="${tmpdir}/reports" override="true" />
 
   <target name="main" depends="sniff,tests">
   </target>
 
   <target name="tests">
-    <exec command="phpunit --configuration ${testsdir}/phpunit.xml --colors" passthru="true"/>
+    <exec command="phpunit --configuration ${testconfig} --colors" passthru="true"/>
   </target>
 
   <target name="tests-report">
-    <exec command="phpunit --coverage-html ${testreportdir}/html --configuration ${testsdir}/phpunit.xml" passthru="true"/>
+    <exec command="phpunit --coverage-html ${testreportdir}/html --configuration ${testconfig}" passthru="true"/>
   </target>
 
   <target name="sniff">
@@ -26,6 +27,9 @@
       <fileset dir="${project.basedir}">
         <include name="**/*.php"/>
         <exclude name="docs/*"/>
+        <exclude name="vendor/*"/>
+        <exclude name="app/cache/*"/>
+        
       </fileset>
       <formatter type="default" usefile="false"/>
     </phpcodesniffer>
